@@ -40,5 +40,5 @@ class formResult{
 
 $result = new formResult();
 if(isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["age"]) && isset($_POST["mail"]) && isset($_POST["gender"])) {
-    echo "Vous êtes " . $result->getGender() . " " . $result->getNom() . " " . $result->getPrenom() . ". Vous avez " . $result->getAge() . " ans et votres mail est " . $result->getMail() . ".";
+    echo "Vous êtes " . $result->getGender() . " " . $result->getNom() . " " . $result->getPrenom() . ". Vous avez " . $result->getAge() . " ans et votre mail est " . $result->getMail() . ".";
 }
