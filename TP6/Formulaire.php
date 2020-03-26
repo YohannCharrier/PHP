@@ -1,7 +1,7 @@
 <?php
 
 class Formulaire {
-    private $formulaire;
+    protected $formulaire;
     function __construct($fichier,$methode) {
         $this->formulaire = "<form action='".$fichier.".php' method='".$methode."'></form>";
     }
