@@ -2,11 +2,11 @@
 
 include "../TP6/Formulaire.php";
 
-final class Form2 extends Formulaire{
+class Form2 extends Formulaire{
     function __construct($fichier, $methode){
         parent::__construct($fichier, $methode);
     }
-    final function ajouterBoutonRadio($texte){
+    function ajouterBoutonRadio($texte){
         $boutonRad = $texte."<input type='radio' name='radio' value='".$texte."'/><br>";
         $pos = strrpos($this->formulaire,"<",-1);
         $part1 =  substr($this->formulaire,0,$pos);
