@@ -1,9 +1,9 @@
 <?php
 
+
 function connexpdo($database,$user,$password){
     try {
-        $dbh = new PDO($database,$user,$password);
-        return $dbh;
+        return new PDO($database,$user,$password);
     } catch (PDOException $e) {
         echo 'Connexion échouée : ' . $e->getMessage();
     }

@@ -12,23 +12,34 @@
 
         include 'connexpdo.php';
 
-        $dsn = 'pgsql:dbname=citations;host=127.0.0.1;port=5432';
+        $dsn = 'pgsql:host=127.0.0.1;port=5432;dbname=citations';
         $user = 'postgres';
-        $password = 'password';
+        $password = 'pass';
 
         $dbh = connexpdo($dsn,$user,$password);
 
-        $query1 = "SELECT nom,prenom FROM auteur";
+        $query1 = "SELECT nom, prenom FROM auteur";
         $result1= $dbh->query($query1);
-        for($i=0;$i<count($result1);$i++){
-            echo "<tr><td>$result1[i][0]</td><td>$result1[i][1]</td></tr>";
+        foreach($result1 as $author){
+            echo "<tr><td>".$author['nom']."</td><td>".$author['prenom']."</td></tr>";
         }
-        echo "</table>";
+        ?>
+        </table>
+        <h1>Citations de la BD</h1>
+        <?php
         $query2 = "SELECT phrase FROM citation";
         $result2 = $dbh->query($query2);
-
+        foreach($result2 as $citation){
+            echo $citation['phrase']."<br>";
+        }
+        ?>
+        <h1>Siècles de la BD</h1>
+        <?php
         $query3 = "SELECT numero FROM siecle";
         $result3 = $dbh->query($query3);
+        foreach($result3 as $siecle){
+            echo $siecle['numero']."<br>";
+        }
 
         ?>
     </body>
