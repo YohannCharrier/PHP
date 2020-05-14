@@ -49,7 +49,7 @@
                         <label for='exampleInputEmail1'>Auteur</label>
                         <select class='form-control' name='author'>";
         foreach ($result1 as $author){
-            echo "<option>".$author['prenom']." ".$author['nom']."</option>";
+            echo "<option value='".$author['nom']."'>".$author['prenom']." ".$author['nom']."</option>";
         }
         echo "</select>
                 </div>
@@ -58,7 +58,7 @@
                     <label for='exampleInputPassword1'>Siècle</label>
                     <select class='form-control' name='siecle'>";
         foreach ($result2 as $siecle){
-            echo "<option>".$siecle['numero']."</option>";
+            echo "<option value='".$siecle['numero']."'>".$siecle['numero']."</option>";
         }
         echo "</select>
                 </div>
@@ -66,8 +66,36 @@
                 <button type='submit' class='btn btn-primary'>Rechercher</button>
             </div>
         </form>";
-        if(isset($_POST["auteur"]) && isset[$_POST["siecle"]]){
+        if(isset($_POST["author"]) && isset($_POST["siecle"])){
+            $query3 = "SELECT phrase FROM citation WHERE auteurid=? AND siecleid=?";
+            $queryAutId = "SELECT id FROM auteur WHERE nom=?";
+            $querySieId = "SELECT id FROM siecle WHERE numero=?";
 
+            $sth = $db->prepare($queryAutId);
+            $sth->execute(array($_POST["author"]));
+            $rst = $sth->fetch();
+            $AutId = $rst["id"];
+
+            $sth2 = $db->prepare($querySieId);
+            $sth2->execute(array($_POST["siecle"]));
+            $rst2 = $sth2->fetch();
+            $SieId = $rst2["id"];
+
+            $sth3 = $db->prepare($query3);
+            $sth3->execute(array($AutId,$SieId));
+            $rst3 = $sth3->fetchAll();
+
+            echo "<ul class='list-group list-group-flush'>
+                      <li class='list-group-item'>
+                        <div class='col-md-8'>Citations</div>
+                        <div class='col-md-2'>Auteur</div>
+                        <div class='col-md-2'>Siècle</div>
+                      </li>
+                      <li class='list-group-item'>Dapibus ac facilisis in</li>
+                      <li class='list-group-item'>Morbi leo risus</li>
+                      <li class='list-group-item'>Porta ac consectetur ac</li>
+                      <li class='list-group-item'>Vestibulum at eros</li>
+                    </ul>";
         }
         ?>
     </body>
