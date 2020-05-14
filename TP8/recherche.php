@@ -26,78 +26,86 @@
                 </ul>
             </div>
         </nav>
-        <h1>Rechercher une citation</h1>
-        <?php
+        <div class="col-md-6">
+            <h1>Rechercher une citation</h1>
+            <?php
 
-        include 'connexpdo.php';
+            include 'connexpdo.php';
 
-        $dsn = 'pgsql:host=127.0.0.1;port=5432;dbname=citations';
-        $user = 'postgres';
-        $password = 'pass';
+            $dsn = 'pgsql:host=127.0.0.1;port=5432;dbname=citations';
+            $user = 'postgres';
+            $password = 'pass';
 
-        $dbh = connexpdo($dsn,$user,$password);
+            $dbh = connexpdo($dsn,$user,$password);
 
-        $query1 = "SELECT nom, prenom FROM auteur";
-        $result1= $dbh->query($query1);
+            $query1 = "SELECT nom, prenom FROM auteur";
+            $result1= $dbh->query($query1);
 
-        $query2 = "SELECT numero FROM siecle";
-        $result2 = $dbh->query($query2);
+            $query2 = "SELECT numero FROM siecle";
+            $result2 = $dbh->query($query2);
 
-        echo "<form action='recherche.php' method='post'>
-                <div class='col-md-4'>
+            echo "<form action='recherche.php' method='post'>
+                        <div class='form-group'>
+                            <label for='exampleInputEmail1'>Auteur</label>
+                            <select class='form-control' name='author'>";
+            foreach ($result1 as $author){
+                echo "<option value='".$author['nom']."'>".$author['prenom']." ".$author['nom']."</option>";
+            }
+            echo "</select>
+                    </div>
+        
                     <div class='form-group'>
-                        <label for='exampleInputEmail1'>Auteur</label>
-                        <select class='form-control' name='author'>";
-        foreach ($result1 as $author){
-            echo "<option value='".$author['nom']."'>".$author['prenom']." ".$author['nom']."</option>";
-        }
-        echo "</select>
-                </div>
-    
-                <div class='form-group'>
-                    <label for='exampleInputPassword1'>Siècle</label>
-                    <select class='form-control' name='siecle'>";
-        foreach ($result2 as $siecle){
-            echo "<option value='".$siecle['numero']."'>".$siecle['numero']."</option>";
-        }
-        echo "</select>
-                </div>
-    
-                <button type='submit' class='btn btn-primary'>Rechercher</button>
-            </div>
-        </form>";
-        if(isset($_POST["author"]) && isset($_POST["siecle"])){
-            $query3 = "SELECT phrase FROM citation WHERE auteurid=? AND siecleid=?";
-            $queryAutId = "SELECT id FROM auteur WHERE nom=?";
-            $querySieId = "SELECT id FROM siecle WHERE numero=?";
+                        <label for='exampleInputPassword1'>Siècle</label>
+                        <select class='form-control' name='siecle'>";
+            foreach ($result2 as $siecle){
+                echo "<option value='".$siecle['numero']."'>".$siecle['numero']."</option>";
+            }
+            echo "</select>
+                    </div>        
+                    <button type='submit' class='btn btn-primary'>Rechercher</button>
+            </form>
+            <br>";
+            if(isset($_POST["author"]) && isset($_POST["siecle"])){
+                $query3 = "SELECT phrase FROM citation WHERE auteurid=? AND siecleid=?";
+                $queryAutId = "SELECT id FROM auteur WHERE nom=?";
+                $querySieId = "SELECT id FROM siecle WHERE numero=?";
 
-            $sth = $db->prepare($queryAutId);
-            $sth->execute(array($_POST["author"]));
-            $rst = $sth->fetch();
-            $AutId = $rst["id"];
+                $sth = $dbh->prepare($queryAutId);
+                $sth->execute(array($_POST["author"]));
+                $rst = $sth->fetch();
+                $AutId = $rst["id"];
 
-            $sth2 = $db->prepare($querySieId);
-            $sth2->execute(array($_POST["siecle"]));
-            $rst2 = $sth2->fetch();
-            $SieId = $rst2["id"];
+                $sth2 = $dbh->prepare($querySieId);
+                $sth2->execute(array($_POST["siecle"]));
+                $rst2 = $sth2->fetch();
+                $SieId = $rst2["id"];
 
-            $sth3 = $db->prepare($query3);
-            $sth3->execute(array($AutId,$SieId));
-            $rst3 = $sth3->fetchAll();
+                $sth3 = $dbh->prepare($query3);
+                $sth3->execute(array($AutId,$SieId));
+                $rst3 = $sth3->fetchAll();
 
-            echo "<ul class='list-group list-group-flush'>
-                      <li class='list-group-item'>
-                        <div class='col-md-8'>Citations</div>
-                        <div class='col-md-2'>Auteur</div>
-                        <div class='col-md-2'>Siècle</div>
-                      </li>
-                      <li class='list-group-item'>Dapibus ac facilisis in</li>
-                      <li class='list-group-item'>Morbi leo risus</li>
-                      <li class='list-group-item'>Porta ac consectetur ac</li>
-                      <li class='list-group-item'>Vestibulum at eros</li>
-                    </ul>";
-        }
-        ?>
+                echo "<div class='container'>
+                        <div class='row'>
+                            <div class='col-md-8'>Citations</div>
+                            <div class='col-md-2'>Auteur</div>
+                            <div class='col-md-2'>Siècle</div>
+                        </div>
+                       </div>
+                       <hr>";
+                foreach($rst3 as $citation){
+                    echo "<div class='container'>
+                        <div class='row'>
+                            <div class='col-md-8'>".$citation['phrase']."</div>
+                            <div class='col-md-2'>".$_POST['author']."</div>
+                            <div class='col-md-2'>".$_POST['siecle']."</div>
+                        </div>
+                       </div>
+                       <hr>";
+                }
+
+            }
+            ?>
+        </div>
     </body>
 </html>
 
