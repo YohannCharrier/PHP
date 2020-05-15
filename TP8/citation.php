@@ -31,7 +31,7 @@
             <hr>
             <?php
                 include 'connexpdo.php';
-                $db = connexpdo('pgsql:host=127.0.0.1;port=5432;dbname=citations','postgres','pass');
+                $db = connexpdo('pgsql:host=127.0.0.1;port=5432;dbname=citations','postgres','password');
                 $query1 = "SELECT * FROM citation";
                 $rst1 = $db->query($query1);
                 $nbCit = 0;

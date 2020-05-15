@@ -14,7 +14,7 @@
 
         $dsn = 'pgsql:host=127.0.0.1;port=5432;dbname=citations';
         $user = 'postgres';
-        $password = 'pass';
+        $password = 'password';
 
         $dbh = connexpdo($dsn,$user,$password);
 
