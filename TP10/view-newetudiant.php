@@ -16,7 +16,7 @@
             <form action="controller.php?func=addEtudiant" method="post">
                 <div class="form-group">
                     <label for="userId">User ID</label>
-                    <input type="text" class="col-2 form-control" id="userId" name="userId" value="<?php echo $_GET["id"];?>" readonly>
+                    <input type="text" class="col-2 form-control" id="userId" name="userId" value="<?php session_start(); echo $_SESSION["user_id"] ;?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="nom">Nom</label>

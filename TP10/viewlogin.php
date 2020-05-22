@@ -17,7 +17,7 @@
             <form action="controller.php?func=connect" method="post">
                 <div class="form-group">
                     <label for="login">Login</label>
-                    <input type="text" class="form-control" id="login" name="login" minlength="6" maxlength="15">
+                    <input type="text" class="form-control" id="login" name="login" minlength="4" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>

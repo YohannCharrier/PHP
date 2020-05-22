@@ -25,10 +25,12 @@
                         $password = 'password';
 
                         $dbh = connexpdo($dsn,$user,$password);
+                        session_start();
+                        $user_id = $_SESSION["user_id"];
 
                         $query2 = "SELECT * FROM etudiant WHERE user_id=?";
                         $sel2 = $dbh->prepare($query2);
-                        $sel2->execute([$_GET["id"]]);
+                        $sel2->execute([$user_id]);
                         $rst2 = $sel2->fetchAll();
                         foreach ($rst2 as $etu){
                             echo "<option>".$etu["id"]."</option>";
@@ -45,7 +47,7 @@
                 $sel3->execute([$_POST["etuId2"]]);
                 $rst3 = $sel3->fetch();
 
-                echo "<form action='controller.php?func=modifyEtudiant&userId=".$_GET["id"]."' method='post'>
+                echo "<form action='controller.php?func=modifyEtudiant' method='post'>
                                     <div class='form-group'>
                                         <label for='id'>ID de l'étudiant</label>
                                         <input type='number' class='col-3 form-control' id='id' name='id' value='".$rst3["id"]."' readonly>

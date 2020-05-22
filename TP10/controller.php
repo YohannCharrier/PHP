@@ -6,6 +6,7 @@ $user = 'postgres';
 $password = 'password';
 
 $dbh = connexpdo($dsn,$user,$password);
+session_start();
 
 function addUser($dbh){
 
@@ -30,7 +31,8 @@ function connect($dbh){
         }else {
             foreach ($result as $user) {
                 if (password_verify($_POST["password"], $user["password"])) {
-                    header("location:viewadmin.php?id=".$user["id"]);
+                    $_SESSION["user_id"]=$user["id"];
+                    header("location:viewadmin.php");
                 } else {
                     header("location:viewlogin.php?password=false");
                 }
@@ -44,7 +46,7 @@ function addEtudiant($dbh){
         $add = "INSERT INTO etudiant (id,user_id,nom,prenom,note) VALUES (DEFAULT,?,?,?,?)";
         $add2 = $dbh->prepare($add);
         $add2->execute([$_POST["userId"],$_POST["nom"],$_POST["prenom"],$_POST["note"]]);
-        header("location:viewadmin.php?id=".$_POST["userId"]);
+        header("location:viewadmin.php");
     }
 }
 
@@ -53,20 +55,16 @@ function deleteEtudiant($dbh){
         $del = "DELETE FROM etudiant WHERE id=?";
         $del2 = $dbh->prepare($del);
         $del2->execute([$_POST["etuId1"]]);
-        header("location:viewadmin.php?id=".$_GET["userId"]);
+        header("location:viewadmin.php?");
     }
 }
 
 function modifyEtudiant($dbh){
     if(isset($_POST["id"],$_POST["nom"],$_POST["prenom"],$_POST["note"])){
-        echo "modify";
         $mod = "UPDATE etudiant SET nom=?,prenom=?,note=? WHERE id=?";
-        echo "mod";
         $mod2 = $dbh->prepare($mod);
-        echo "prepare";
         $mod2->execute([$_POST["nom"],$_POST["prenom"],$_POST["note"],$_POST["id"]]);
-        echo "execute";
-        header("location:viewadmin.php?id=".$_GET["userId"]);
+        header("location:viewadmin.php");
     }
 }
 

@@ -23,10 +23,11 @@
             $password = 'password';
 
             $dbh = connexpdo($dsn,$user,$password);
-
+            session_start();
+            $user_id = $_SESSION["user_id"];
             $query = "SELECT * FROM utilisateur WHERE id=?";
             $sel = $dbh->prepare($query);
-            $sel->execute([$_GET["id"]]);
+            $sel->execute([$user_id]);
             $rst = $sel->fetch();
             echo "<h1 class='col-8'>Bienvenue ".$rst["nom"]." ".$rst["prenom"]."</h1>"
             ?>
@@ -47,7 +48,7 @@
                     <?php
                     $query2 = "SELECT * FROM etudiant WHERE user_id=?";
                     $sel2 = $dbh->prepare($query2);
-                    $sel2->execute([$_GET["id"]]);
+                    $sel2->execute([$user_id]);
                     $rst2 = $sel2->fetchAll();
                     $nbEtudiant = 0;
                     foreach ($rst2 as $etu){
@@ -68,14 +69,14 @@
 
                 <div class="row">
                     <div class="col">
-                        <a class="btn btn-success btn-lg" type="button" href="view-newetudiant.php?id=<?php echo $_GET["id"]; ?>" >Ajouter étudiant</a>
+                        <a class="btn btn-success btn-lg" type="button" href="view-newetudiant.php" >Ajouter étudiant</a>
                     </div>
                     <div class="col">
-                        <a class="btn btn-info btn-lg" type="button" href="view-editetudiant.php?id=<?php echo $_GET["id"]; ?>" >Modifier étudiant</a>
+                        <a class="btn btn-info btn-lg" type="button" href="view-editetudiant.php" >Modifier étudiant</a>
                     </div>
                     <div class="col">
                         <h3>Supprimer un étudiant</h3>
-                        <form action="controller.php?func=deleteEtudiant&userId=<?php echo $_GET["id"]; ?>" method="post">
+                        <form action="controller.php?func=deleteEtudiant" method="post">
                             <label for="etuId1">ID de l'étudiant</label>
                             <select id="etuId1" class="col-4 form-control" name="etuId1">
                                 <?php
